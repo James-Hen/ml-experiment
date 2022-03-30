@@ -1,8 +1,9 @@
 # OS files
 *.DS_Store
 
-# Datasets
+# Datasets and results
 */data/*
+*/result/*
 
 # ========== Python gitignore templates ========== #
 
