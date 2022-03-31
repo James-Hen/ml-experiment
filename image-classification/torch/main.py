@@ -55,17 +55,21 @@ model = nn.Sequential(nn.Linear(784, 256),
                       nn.Linear(128, 64),
                       nn.ReLU(),
                       nn.Linear(64, 10),
-                      nn.LogSoftmax(dim = 1)
+                      nn.ReLU()
                      ).to(device)
 
 # Define the loss
-criterion = nn.NLLLoss().to(device)
+criterion = nn.MSELoss().to(device)
+
+def to_one_hot(labels, device):
+  onehot = torch.zeros(labels.shape[0], 10).to(device)
+  return onehot.scatter(dim=1, index=labels.view(-1, 1).to(device), value=1.)
 
 # Define the optimizer
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 # Define the epochs
-epochs = 2
+epochs = 1
 
 # Initiate the timer to instrument the performance
 timer_start = time.process_time_ns()
@@ -78,7 +82,7 @@ for e in range(epochs):
   for images, labels in trainloader:
     # Flatten Fashion-MNIST images into a 784 long vector
     images = images.view(images.shape[0], -1).to(device)
-    labels = labels.to(device)
+    labels = to_one_hot(labels, device)
     
     # Training pass
     optimizer.zero_grad()
@@ -102,8 +106,9 @@ for e in range(epochs):
       for images, labels in testloader:
         images = images.view(images.shape[0], -1).to(device)
         labels = labels.to(device)
+        labels_one_hot = to_one_hot(labels, device)
         log_ps = model(images).to(device)
-        test_loss += criterion(log_ps, labels)
+        test_loss += criterion(log_ps, labels_one_hot)
         
         ps = torch.exp(log_ps).to(device)
         top_p, top_class = ps.topk(1, dim = 1)
@@ -119,12 +124,15 @@ for e in range(epochs):
           "Training loss: {:.3f}..".format(running_loss/len(trainloader)),
           "Test loss: {:.3f}..".format(test_loss/len(testloader)),
           "Test Accuracy: {:.3f}".format(accuracy/len(testloader)),
-          "Cur time(ns): {}", epoch_times[-1])
+          "Cur time(ns): {}".format(epoch_times[-1]))
 
 plt.cla()
 plt.clf()
 plt.plot(train_losses, label = "Training loss")
 plt.plot(test_losses, label = "Validation loss")
+plt.xlabel("Epoch")
+plt.ylabel("MSE Loss")
+plt.title("Pytorch implementation of 4-layer dense network")
 plt.legend()
 plt.savefig(RESULT_PATH + 'training_proc.png')
 

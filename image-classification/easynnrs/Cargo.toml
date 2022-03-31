@@ -1,6 +1,10 @@
 [package]
 name = "easynnrs"
 version = "0.1.0"
-edition = "2022"
+edition = "2021"
 
 [dependencies]
+rand = "0.8.5"
+easynn = "0.1.4-beta"
+flate2 = "1.0.22"
+rust-mnist = "0.1"
