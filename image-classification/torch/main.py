@@ -1,5 +1,5 @@
 # Variables
-DATASET_PATH = './data/'
+DATASET_PATH = '../data/'
 RESULT_PATH = './result/'
 DEBUG = True
 GPU = True
