@@ -118,7 +118,6 @@ version = "0.1.0"
 dependencies = [
  "easynn",
  "flate2",
- "rand 0.8.5",
  "rust-mnist",
 ]
 

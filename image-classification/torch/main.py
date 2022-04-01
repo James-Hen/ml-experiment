@@ -2,7 +2,7 @@
 DATASET_PATH = '../data/'
 RESULT_PATH = './result/'
 DEBUG = True
-GPU = True
+GPU = False
 
 # Import the necessary libraries
 import numpy as np
@@ -12,8 +12,7 @@ import json
 import time
 
 # Device settings
-if (GPU):
-  device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() and GPU else 'cpu')
 
 # Loading the Fashion-MNIST dataset
 from torchvision import datasets, transforms
@@ -26,8 +25,8 @@ transform = transforms.Compose([transforms.ToTensor(),
 # Download and load the training data
 trainset = datasets.FashionMNIST(DATASET_PATH, download = True, train = True, transform = transform)
 testset = datasets.FashionMNIST(DATASET_PATH, download = True, train = False, transform = transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size = 64, shuffle = True)
-testloader = torch.utils.data.DataLoader(testset, batch_size = 64, shuffle = True)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size = 1024, shuffle = True)
+testloader = torch.utils.data.DataLoader(testset, batch_size = 1024, shuffle = True)
 
 # Examine a sample if DEBUG is set
 if (DEBUG):
@@ -69,7 +68,7 @@ def to_one_hot(labels, device):
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 # Define the epochs
-epochs = 1
+epochs = 30
 
 # Initiate the timer to instrument the performance
 timer_start = time.process_time_ns()
@@ -137,4 +136,8 @@ plt.legend()
 plt.savefig(RESULT_PATH + 'training_proc.png')
 
 with open(RESULT_PATH + 'torch_results.json', 'w+') as f:
-  json.dump((train_losses, test_losses, epoch_times), f)
+  json.dump({
+      'train_losses': train_losses,
+      'test_losses': test_losses,
+      'epoch_times': epoch_times,
+    }, f)
