@@ -4,5 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-easynn = "0.1.4-beta"
 rust-mnist = "0.1.4"
+easynn = "0.1.7-beta"
+serde = { version = "*", features = ["derive"] }
+serde_json = "*"
+rand = "*"

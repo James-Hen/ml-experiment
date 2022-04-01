@@ -19,7 +19,7 @@ from torchvision import datasets, transforms
 
 # Define a transform to normalize the data
 transform = transforms.Compose([transforms.ToTensor(),
-                                transforms.Normalize((0.5), (0.5))
+                                # transforms.Normalize((0.5), (0.5))
                                ])
 
 # Download and load the training data
@@ -68,7 +68,7 @@ def to_one_hot(labels, device):
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 # Define the epochs
-epochs = 30
+epochs = 100
 
 # Initiate the timer to instrument the performance
 timer_start = time.process_time_ns()
