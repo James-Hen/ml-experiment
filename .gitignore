@@ -2,9 +2,12 @@
 *.DS_Store
 
 # Datasets, builds and results
-*data/
-*target/
-*result/
+*data*
+*target*
+*result*
+nohup.out
+*.png
+*.eps
 
 # ========== Python gitignore templates ========== #
 
